@@ -375,7 +375,39 @@ void WEAK_ISR FPU_IRQHandler(void)                    /* FPU                    
 {
 }
 
-void WEAK_ISR _end(void)
+void WEAK_ISR UART7_IRQHandler(void) /* UART7 global interrupt */
+{
+}
+
+void WEAK_ISR UART8_IRQHandler(void) /* UART8 global interrupt */
+{
+}
+
+void WEAK_ISR SPI4_IRQHandler(void) /* SPI4 global Interrupt */
+{
+}
+
+void WEAK_ISR SPI5_IRQHandler(void) /* SPI5 global Interrupt */
+{
+}
+
+void WEAK_ISR SPI6_IRQHandler(void) /* SPI6 global Interrupt */
+{
+}
+
+void WEAK_ISR SAI1_IRQHandler(void) /* SAI1 global Interrupt */
+{
+}
+
+void WEAK_ISR LTDC_IRQHandler(void) /* LTDC global Interrupt */
+{
+}
+
+void WEAK_ISR LTDC_ER_IRQHandler(void) /* LTDC Error global */
+{
+}
+
+void WEAK_ISR DMA2D_IRQHandler(void) /* DMA2D global Interrupt */   
 {
 }
 
@@ -479,6 +511,15 @@ void (*vector_table[]) (void) = {
     CRYP_IRQHandler,
     HASH_RNG_IRQHandler,
     FPU_IRQHandler,
+    UART7_IRQHandler,
+    UART8_IRQHandler,
+    SPI4_IRQHandler,
+    SPI5_IRQHandler,
+    SPI6_IRQHandler,
+    SAI1_IRQHandler,
+    LTDC_IRQHandler,
+    LTDC_ER_IRQHandler,
+    DMA2D_IRQHandler
 }; 
 
 void Reset_Handler(void)
