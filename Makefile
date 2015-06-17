@@ -18,3 +18,6 @@ reset: $(BIN)
 
 clean:
 	rm $(BIN)
+
+tags:
+	ctags -R . $(CMSIS_INCLUDES)

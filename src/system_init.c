@@ -50,21 +50,29 @@ static void set_sys_clock(void)
         /* Enable high performance mode, System frequency up to 168 MHz */
         RCC->APB1ENR |= RCC_APB1ENR_PWREN;
         PWR->CR |= PWR_CR_PMODE;  
+        /* Configure the main PLL */
+        RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |
+            (RCC_PLLCFGR_PLLSRC_HSE) | (PLL_Q << 24);
+        /* Enable the main PLL */
+        RCC->CR |= RCC_CR_PLLON;
+        /* Enable over drive mode */
+        PWR->CR |= PWR_CR_ODEN;
+        /* Wait for overdrive to be ready */
+        while (!(PWR->CSR & PWR_CSR_ODRDY));
+        /* Switch voltage regulator to overdrive mode */
+        PWR->CR |= PWR_CR_ODSWEN;
+        /* Wait for voltage regulator to switch */
+        while (!(PWR->CSR & PWR_CSR_ODSWRDY));
+        /* Configure Flash prefetch, Instruction cache, Data cache and wait state */
+        FLASH->ACR = FLASH_ACR_ICEN |FLASH_ACR_DCEN |FLASH_ACR_LATENCY_5WS;
         /* HCLK = SYSCLK / 1*/
         RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
         /* PCLK2 = HCLK / 2*/
         RCC->CFGR |= RCC_CFGR_PPRE2_DIV2;
         /* PCLK1 = HCLK / 4*/
         RCC->CFGR |= RCC_CFGR_PPRE1_DIV4;
-        /* Configure the main PLL */
-        RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |
-            (RCC_PLLCFGR_PLLSRC_HSE) | (PLL_Q << 24);
-        /* Enable the main PLL */
-        RCC->CR |= RCC_CR_PLLON;
         /* Wait till the main PLL is ready */
         while((RCC->CR & RCC_CR_PLLRDY) == 0);
-        /* Configure Flash prefetch, Instruction cache, Data cache and wait state */
-        FLASH->ACR = FLASH_ACR_ICEN |FLASH_ACR_DCEN |FLASH_ACR_LATENCY_5WS;
         /* Select the main PLL as system clock source */
         RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
         RCC->CFGR |= RCC_CFGR_SW_PLL;
