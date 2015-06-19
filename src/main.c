@@ -3,6 +3,13 @@
 #include <stdint.h> 
 #include <stdio.h> 
 #include <math.h> 
+#include "timer_example.h" 
+#include "uart_example.h" 
+#include "adc_example.h" 
+#include <stdlib.h> 
+#include <string.h> 
+
+#define TIMEOUT_LIMIT 1000000 
 
 #define GPIO_G_init(pin)\
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN;\
@@ -13,9 +20,12 @@
 
 int main (void)
 {
-    GPIO_G_init(13);
-    GPIO_G_toggle(13);
-    GPIO_G_init(14);
-    GPIO_G_toggle(14);
-    while(1);
+    uart_setup();
+    timer_setup();
+    adc_setup_2();
+    float f;
+    while (1) {
+        f = sinf(1.);
+        adc_loop_2(TIMEOUT_LIMIT);
+    }
 }

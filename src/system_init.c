@@ -21,9 +21,29 @@
  * USB OTG not setup properly unless PLL_VCO / PLLQ = 48MHz */
 #define PLL_Q      8
 
-uint32_t SystemCoreClock = 180000000;
+static uint32_t SystemCoreClock = 180000000;
 
 __I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4};
+
+/* Get the prescalar of the APB bus clock where int is the number. Returns 0 if
+ * number isn't good (0 cannot be the prescalar). */
+uint8_t get_APBPresc(int number)
+{
+    switch (number) {
+        case 1:
+            return 1 << APBPrescTable[(RCC->CFGR & RCC_CFGR_PPRE1) >> 10];
+        case 2:
+            return 1 << APBPrescTable[(RCC->CFGR & RCC_CFGR_PPRE2) >> 13];
+        default:
+            return 0;
+    }
+}
+
+uint8_t get_AHBPresc(void)
+{
+    return 1 << AHBPrescTable[(RCC->CFGR & RCC_CFGR_HPRE) >> 4];
+}
 
 /* Configures the System clock source, PLL Multiplier and Divider factors, 
  * AHB/APBx prescalers and Flash settings
@@ -101,6 +121,13 @@ static void system_preinit(void)
     RCC->CIR = 0x00000000;
 }
 
+static void enable_fpu(void)
+{
+    SCB->CPACR |= 0xf << 20;
+    __DSB();
+    __ISB();
+}
+
 /* Setup the microcontroller system
  * Initialize the Embedded Flash Interface, the PLL and update the 
  * SystemFrequency variable.
@@ -110,6 +137,8 @@ void system_init(void)
     system_preinit();
     /* Insert peripheral startup functions here as needed */
     set_sys_clock();
+    /* Enable fpu */
+    enable_fpu();
 }
 
 /* Update SystemCoreClock variable according to Clock Register Values.
@@ -186,3 +215,7 @@ void SystemCoreClockUpdate(void)
     SystemCoreClock >>= tmp;
 }
 
+uint32_t get_SystemCoreClock(void)
+{
+    return SystemCoreClock;
+}

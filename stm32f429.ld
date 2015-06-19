@@ -24,6 +24,7 @@ SECTIONS
     {
         . = ALIGN(4);
         *(.text)
+        *(.text*)
         . = ALIGN(4);
         _etext = .;
     } >flash
@@ -33,6 +34,7 @@ SECTIONS
         . = ALIGN(4);
         _sdata = .;
         *(.data)
+        *(.data*)
         . = ALIGN(4);
         _edata = .;
     } >ram AT> flash
@@ -43,6 +45,7 @@ SECTIONS
         /* Needed by standard library, it seems */
         __bss_start__ = .;
         *(.bss)
+        *(.bss*)
         . = ALIGN(4);
         _ebss = .;
         /* Needed by standard library, it seems */

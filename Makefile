@@ -4,7 +4,10 @@ BIN=main.elf
 OCD 		   = openocd -f /usr/share/openocd/scripts/board/stm32f4discovery.cfg
 
 $(BIN) : $(SRCS)
-	arm-none-eabi-gcc -DSTM32F429_439xx $^ -Iinc -I$(CMSIS_INCLUDES) -Tstm32f429.ld -o $@ -ggdb3 -mlittle-endian -mthumb -mcpu=cortex-m4 -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16 -dD -lm
+	arm-none-eabi-gcc -DSTM32F429_439xx $^ -Iinc -I$(CMSIS_INCLUDES) \
+		-Tstm32f429.ld -o $@ -ggdb3 -mlittle-endian -mthumb -mcpu=cortex-m4 \
+		-mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16 -dD -lm \
+		--specs=nano.specs 
 
 flash: $(BIN)
 	$(OCD) -c init \
