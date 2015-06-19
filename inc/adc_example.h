@@ -41,4 +41,5 @@ void adc_setup(void);
 void adc_setup_2(void);
 uint32_t adc_read(void);
 uint32_t adc_read_2(void);
+void adc_setup_dma_1_datum(void);
 #endif /* ADC_EXAMPLE_H */

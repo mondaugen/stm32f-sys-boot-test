@@ -22,10 +22,11 @@ int main (void)
 {
     uart_setup();
     timer_setup();
-    adc_setup_2();
+//    adc_setup_2();
+    adc_setup_dma_1_datum();
     float f;
     while (1) {
-        f = sinf(1.);
-        adc_loop_2(TIMEOUT_LIMIT);
+//        f = sinf(1.);
+//        adc_loop_2(TIMEOUT_LIMIT);
     }
 }
