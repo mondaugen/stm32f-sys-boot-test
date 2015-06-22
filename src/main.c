@@ -20,13 +20,10 @@
 
 int main (void)
 {
-    uart_setup();
-    timer_setup();
-//    adc_setup_2();
-    adc_setup_dma_1_datum();
+//    uart_setup();
+//    timer_setup();
+    adc_setup_dma_no_scan();
     float f;
     while (1) {
-//        f = sinf(1.);
-//        adc_loop_2(TIMEOUT_LIMIT);
     }
 }
