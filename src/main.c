@@ -18,12 +18,24 @@
 #define GPIO_G_toggle(pin)\
     GPIOG->ODR ^= (1 << pin)
 
+#define FLASH_SIMPLE_WRITE 0
+#define FLASH_EXAMPLE_WRITE 0
+#define FLASH_EXAMPLE_READ  1
+
 int main (void)
 {
-//    uart_setup();
-//    timer_setup();
-    adc_setup_dma_no_scan();
-    float f;
-    while (1) {
-    }
+#if FLASH_SIMPLE_WRITE
+   flash_setup();
+   simple_flash_write();
+#elif FLASH_EXAMPLE_WRITE
+   flash_setup();
+   char stuff[] = "zombocom";
+   flash_erase();
+   flash_write(stuff,8);
+#elif FLASH_EXAMPLE_READ
+   flash_setup();
+   char stuff[] = {0,0,0,0,0,0,0,0};
+   flash_read(stuff,8);
+#endif  
+   while(1);
 }
