@@ -1,7 +1,8 @@
 #include "flash_example.h" 
 #include "stm32f4xx.h" 
 
-#define FLASH_START_ADDR 0x0810c000 
+#define FLASH_START_ADDR 0x0810c000
+#define FLASH_END_ADDR   0x08110000 
 #define FLASH_SECTOR     15
 /* The number of bytes that can be read and written at one time */
 #define FLASH_ACCESS_SIZE 4 
@@ -116,4 +117,38 @@ void simple_flash_write(void)
     /* wait for flash to be free */
     while (FLASH->SR & FLASH_SR_BSY);
     *((uint32_t*)FLASH_START_ADDR) = 0xdeadbeef;
+}
+
+void long_flash_write(void)
+{
+    /* Setup indicator LEDS */
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN;
+    GPIOG->MODER |= (1 << (14*2)) | (1 << (13*2));
+    /* wait for flash to be free */
+    while (FLASH->SR & FLASH_SR_BSY);
+    /* Unlock flash */
+    FLASH->KEYR = 0x45670123;
+    FLASH->KEYR = 0xcdef89ab;
+    /* Set program bit */
+    FLASH->CR |= FLASH_CR_PG;
+    /* wait for flash to be free */
+    while (FLASH->SR & FLASH_SR_BSY);
+    GPIOG->ODR |= (1 << 13);
+    uint32_t *ptr, val;
+    val = 0;
+    ptr = (uint32_t*)FLASH_START_ADDR;
+    while (ptr < (uint32_t*)FLASH_END_ADDR) {
+        *ptr++ = val++;
+    }
+    /* wait for flash to be free */
+    while (FLASH->SR & FLASH_SR_BSY);
+    /* Reset program bit */
+    FLASH->CR &= ~FLASH_CR_PG;
+    /* lock that flash */
+    FLASH->CR |= FLASH_CR_LOCK;
+    GPIOG->ODR |= (1 << 14);
+}
+
+void flash_dma_write(void)
+{
 }

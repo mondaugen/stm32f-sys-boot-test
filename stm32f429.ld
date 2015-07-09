@@ -2,7 +2,9 @@
 
 MEMORY
 {
-    flash (rx) : ORIGIN = 0x08000000, LENGTH = 2M
+    /* This is the length of flash so that programs do not eliminate sector 15,
+     * which is where non-volatile data are stored. */
+    flash (rx) : ORIGIN = 0x08000000, LENGTH = (0x0810c000 - 0x08000000)
     ram (rwx) : ORIGIN = 0x20000000, LENGTH = 192K
 }
 

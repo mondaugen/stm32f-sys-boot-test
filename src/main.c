@@ -20,7 +20,9 @@
 
 #define FLASH_SIMPLE_WRITE 0
 #define FLASH_EXAMPLE_WRITE 0
-#define FLASH_EXAMPLE_READ  1
+#define FLASH_EXAMPLE_WRITE_2 0
+#define FLASH_EXAMPLE_WRITE_LONG 1
+#define FLASH_EXAMPLE_READ  0
 
 int main (void)
 {
@@ -32,10 +34,19 @@ int main (void)
    char stuff[] = "zombocom";
    flash_erase();
    flash_write(stuff,8);
+#elif FLASH_EXAMPLE_WRITE_2
+   flash_setup();
+   char stuff[] = "mega-bong";
+   flash_erase();
+   flash_write(stuff,8);
 #elif FLASH_EXAMPLE_READ
    flash_setup();
    char stuff[] = {0,0,0,0,0,0,0,0};
    flash_read(stuff,8);
+#elif FLASH_EXAMPLE_WRITE_LONG
+   flash_setup();
+   flash_erase();
+   long_flash_write();
 #endif  
    while(1);
 }
