@@ -21,8 +21,9 @@
 #define FLASH_SIMPLE_WRITE 0
 #define FLASH_EXAMPLE_WRITE 0
 #define FLASH_EXAMPLE_WRITE_2 0
-#define FLASH_EXAMPLE_WRITE_LONG 1
+#define FLASH_EXAMPLE_WRITE_LONG 0
 #define FLASH_EXAMPLE_READ  0
+#define SDRAM_EXAMPLE_1 1 
 
 int main (void)
 {
@@ -47,6 +48,10 @@ int main (void)
    flash_setup();
    flash_erase();
    long_flash_write();
+#elif SDRAM_EXAMPLE_1
+   int result;
+   fmc_setup();
+   result = fmc_read_write_test();
 #endif  
    while(1);
 }
