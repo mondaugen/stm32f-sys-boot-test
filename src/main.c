@@ -24,6 +24,8 @@
 #define FLASH_EXAMPLE_WRITE_LONG 0
 #define FLASH_EXAMPLE_READ  0
 #define SDRAM_EXAMPLE_1 1 
+#define SDRAM_EXAMPLE_FAST 0 
+#define SDRAM_EXAMPLE_COMPARE 1 
 
 int main (void)
 {
@@ -50,8 +52,17 @@ int main (void)
    long_flash_write();
 #elif SDRAM_EXAMPLE_1
    int result;
+ #if SDRAM_EXAMPLE_FAST
+   fmc_setup_fast();
+ #else
    fmc_setup();
+ #endif
+ #if SDRAM_EXAMPLE_COMPARE
+   result = sram_read_write_test_short();
+   result = fmc_read_write_test_short();
+ #else
    result = fmc_read_write_test();
+ #endif
 #endif  
    while(1);
 }

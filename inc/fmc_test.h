@@ -1,15 +1,19 @@
 #ifndef FMC_TEST_H
 #define FMC_TEST_H 
 #include "stm32f4xx.h" 
+#include <stdint.h> 
 
 /* Private defines -----------------------------------------------------------*/
 #define SDRAM_BANK_ADDR ((uint32_t)0xD0000000)
 #define SDRAM_TIMEOUT ((uint32_t)10000000)
-#define SDRAM_LENGTH (64000000/8) 
+#define SDRAM_LENGTH (64000000/8)
+#define SDRAM_LENGTH_SHORT (64000/8)
 
 void fmc_setup(void);
-void fmc_setup_st_example(void);
-int fmc_read_write_test(void);
+void fmc_setup_fast(void);
+uint32_t fmc_read_write_test(void);
+uint32_t fmc_read_write_test_short(void);
+uint32_t sram_read_write_test_short(void);
 
 /*
 #define SDRAM_MODEREG_BURST_LENGTH_1 ((uint16_t)0x0000)
